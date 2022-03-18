@@ -241,7 +241,7 @@ window.addEventListener('DOMContentLoaded', () => {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            // Замість div
+            // Замість div спінер
             // const statusMessage = document.createElement('div');
             // Створюємо тег img
             const statusMessage = document.createElement('img');
@@ -256,26 +256,56 @@ window.addEventListener('DOMContentLoaded', () => {
             // додаємо спінер в нормальне місце після форми зв'язку
             form.insertAdjacentElement('afterend', statusMessage);
 
-            const request = new XMLHttpRequest();
-            request.open('POST', 'server.php');
-
             // для налаштування json налаштовуємо header (1)
-            request.setRequestHeader('Content-type', 'application/json');
+            // 4.56 коментую
+            // request.setRequestHeader('Content-type', 'application/json');
             const formData = new FormData(form);
 
             // створюємо пустий об'єкт (2)
+            
             const object = {};
             formData.forEach(function(value, key){
                 object[key] = value;
             });
             // (3)
-            const json = JSON.stringify(object);
+            // 4.56 Передаю JSON в BODY
+            // const json = JSON.stringify(object);
+            
+
             // (4) відправка вже json
-            request.send(json);
+            // 4.56 коментую
+            // request.send(json);
             // коментую (5)
             // request.send(formData);
 
-            request.addEventListener('load', () => {
+            // 4.56 прибираю 
+            // const request = new XMLHttpRequest();
+            // request.open('POST', 'server.php');
+            // 4.56 замість нього fetch
+            fetch('server.php', {
+                method: "POST",
+                // 4.56 розкоментуємо хедер
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                // 4.56 передаю json до баді
+                // body: formData
+                body: JSON.stringify(object)
+            })
+            .then(data => data.text())
+            .then(data => {
+                console.log(data);
+                showThanksModal(message.success);
+                // form.reset();
+                statusMessage.remove();
+            }).catch(() => {
+                showThanksModal(message.failure);
+            }).finally(() => {
+                form.reset();
+            });
+
+            // 4.56 ----
+            /* request.addEventListener('load', () => {
                 // 1. після успішної відповіді від сервера
                 if (request.status === 200) {
                     // 2. виводимо в консоль результат
@@ -287,9 +317,9 @@ window.addEventListener('DOMContentLoaded', () => {
                     showThanksModal(message.success);
                     form.reset();
                     //звільняю statusMessage від тайм-аута
-                    /* setTimeout(() => {
-                        statusMessage.remove();
-                    }, 2000); */
+                    // setTimeout(() => {
+                    //     statusMessage.remove();
+                    // }, 2000);
                     //тому що він буде використаний лише для лоадінга
                     statusMessage.remove();
                 } else {
@@ -298,7 +328,10 @@ window.addEventListener('DOMContentLoaded', () => {
                     // на це
                     showThanksModal(message.failure);
                 }
-            });
+            }); */
+            // ---- 4.56
+
+
         });
     }
 
@@ -330,5 +363,30 @@ window.addEventListener('DOMContentLoaded', () => {
             closeModal();
         }, 4000);
     }
+
+
+    //Починаю Fetch API (Application Programming Interface)
+    // DOM API
+    // Fetch побудована на промісах
+    // будемо працювати з fake api
+    /* fetch('https://jsonplaceholder.typicode.com/todos/1')
+    // цей метод перетворить з джейсон в звичайний джаваскріпт тип
+    .then(response => response.json()) // проміс
+    .then(json => console.log(json)); */
+
+    //щоб робити post та put треба додати додаткові налаштування
+    /* fetch('https://jsonplaceholder.typicode.com/posts', {
+        // вказую метод
+        method: "POST",
+        // вказую тіло
+        body: JSON.stringify({name: 'Alex'}),
+        // вказую заголовки
+        headers: {
+            'Content-type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(json => console.log(json)); */
+
 
 });
