@@ -1,0 +1,23 @@
+{
+  "name": "food",
+  "version": "1.0.0",
+  "description": "food js project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Viktorres19/food-javascript.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Viktorres19/food-javascript/issues"
+  },
+  "homepage": "https://github.com/Viktorres19/food-javascript#readme",
+  "devDependencies": {
+    "json-server": "^0.17.0",
+    "webpack-cli": "^4.10.0"
+  }
+}
